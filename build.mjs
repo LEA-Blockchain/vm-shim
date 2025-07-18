@@ -42,7 +42,7 @@ async function buildWeb() {
 
     await esbuild.build({
         ...webConfig,
-        format: 'iife',
+        format: 'esm',
         outfile: 'dist/vm-shim.web.js',
     });
 
