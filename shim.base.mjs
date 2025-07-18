@@ -51,6 +51,7 @@ export const cstring = (memory, ptr) => {
  * @param {object} [config={}] - Configuration for the shim.
  * @param {(len: number) => Uint8Array} [config.randomBytesImpl] - The function for generating random bytes.
  * @param {(message: string) => void} [config.onAbort] - Custom abort handler.
+ * @param {object} [config.customEnv] - A user-provided object to extend the `env` namespace in the import object.
  * @returns {{
  *   importObject: WebAssembly.Imports,
  *   bindInstance: (instance: WebAssembly.Instance) => void,
@@ -114,7 +115,9 @@ export function createShimBase(config = {}) {
             },
             __execution_stack_add: (target_index, instruction_data, instruction_size) => {
                 print.blue(`[VM] __execution_stack_add called with target_index=${target_index}, instruction_data=${instruction_data}, instruction_size=${instruction_size}\n`);
-            }
+            },
+            // Allow user-defined functions to be merged
+            ...(config.customEnv || {}),
         },
     };
 

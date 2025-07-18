@@ -23,6 +23,12 @@ export interface ShimConfig {
      * @param message The abort message.
      */
     onAbort?: (message: string) => void;
+
+    /**
+     * A user-provided object to extend the `env` namespace in the import object.
+     * The keys are the function names, and the values are the function implementations.
+     */
+    customEnv?: Record<string, Function>;
 }
 
 /**
