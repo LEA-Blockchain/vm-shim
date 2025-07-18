@@ -1,12 +1,15 @@
+<!--
+giturl: https://github.com/LEA-Blockchain/vm-shim
+name: @leachain/vm-shim
+version: 1.0.0
+-->
+
 # @leachain/vm-shim
 
-A reusable VM shim for Lea-chain WebAssembly modules, compatible with Node.js and browser environments.
+[![npm version](https://img.shields.io/npm/v/@leachain/vm-shim)](https://www.npmjs.com/package/@leachain/vm-shim)
+[![GitHub license](https://img.shields.io/github/license/LEA-Blockchain/vm-shim)](https://github.com/LEA-Blockchain/vm-shim/blob/main/LICENSE)
 
-## Introduction
-
-`@leachain/vm-shim` provides the necessary host environment for running Lea-chain smart contracts compiled to WebAssembly. It offers a consistent and secure set of imported functions that a Wasm module can call into, abstracting away the differences between the Node.js and browser runtimes.
-
-This shim is designed to be lightweight, secure, and easy to integrate into any project that needs to execute Lea-chain Wasm modules.
+@leachain/vm-shim is a reusable VM shim for Lea-chain WebAssembly modules, providing the necessary host environment for running smart contracts compatibly in both Node.js and browser environments.
 
 ## Features
 
@@ -18,23 +21,17 @@ This shim is designed to be lightweight, secure, and easy to integrate into any 
 
 ## Installation
 
-Install the package using your preferred package manager:
-
 ```sh
-# Using npm
 npm install @leachain/vm-shim
-
-# Using yarn
-yarn add @leachain/vm-shim
 ```
 
 ## Usage
 
-The primary export of this module is the `createShim` function, which generates the necessary `importObject` for a WebAssembly instance.
+The primary export is `createShim`, which generates the `importObject` for a WebAssembly instance.
 
-### Node.js Example
+### ES Modules (ESM)
 
-In a Node.js environment, you can directly import the module and use it to instantiate a Wasm file.
+This is the recommended approach for modern Node.js and browser bundlers.
 
 ```javascript
 import { promises as fs } from 'fs';
@@ -62,65 +59,33 @@ async function runWasm() {
 runWasm().catch(console.error);
 ```
 
-### Browser Example
+### CommonJS (CJS)
 
-You can use the shim in the browser with a bundler (like Webpack or Vite) or directly via a `<script>` tag.
-
-#### With a Bundler (ESM)
+For older Node.js environments, you can use `require`.
 
 ```javascript
-import { createShim } from '@leachain/vm-shim';
+const { promises: fs } = require('fs');
+const { createShim } = require('@leachain/vm-shim');
 
-async function runWasmInBrowser() {
-    // 1. Create the shim
+async function runWasm() {
+    // 1. Create the shim instance
     const { importObject, bindInstance } = createShim();
 
-    // 2. Fetch your Wasm module
-    const response = await fetch('/path/to/your_contract.wasm');
-    const wasmBytes = await response.arrayBuffer();
+    // 2. Read your Wasm module bytes
+    const wasmBytes = await fs.readFile('./path/to/your_contract.wasm');
 
-    // 3. Instantiate and bind
+    // 3. Instantiate the module with the shim's import object
     const { instance } = await WebAssembly.instantiate(wasmBytes, importObject);
+
+    // 4. IMPORTANT: Bind the created instance to the shim
     bindInstance(instance);
 
-    // 4. Call a function
-    instance.exports.your_function();
+    // 5. Call an exported function from your Wasm module
+    const result = instance.exports.your_function(123);
+    console.log(`Wasm function returned: ${result}`);
 }
 
-runWasmInBrowser();
-```
-
-#### With a `<script>` Tag (IIFE)
-
-The package includes a browser-ready bundle that exposes a global variable (`LeaChainVmShim`).
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>VM Shim Example</title>
-    <!-- Include the script from your node_modules or a CDN -->
-    <script src="/node_modules/@leachain/vm-shim/dist/vm-shim.web.min.js"></script>
-</head>
-<body>
-    <script>
-        async function run() {
-            // The shim is available on the global LeaChainVmShim object
-            const { createShim } = LeaChainVmShim;
-            const { importObject, bindInstance } = createShim();
-
-            const response = await fetch('/path/to/your_contract.wasm');
-            const wasmBytes = await response.arrayBuffer();
-
-            const { instance } = await WebAssembly.instantiate(wasmBytes, importObject);
-            bindInstance(instance);
-
-            instance.exports.your_function();
-        }
-        run();
-    </script>
-</body>
-</html>
+runWasm().catch(console.error);
 ```
 
 ## API Reference
@@ -142,23 +107,13 @@ A utility function to read a null-terminated UTF-8 string from the Wasm instance
 -   `ptr` `<number>`: The pointer (memory address) of the string.
 -   **Returns** `<string>`: The decoded string.
 
-## Building from Source
+## Contributing
 
-To build the module from the source code, clone the repository and run the build script.
+Contributions are welcome! Please open an issue or submit a pull request for any bugs, features, or improvements.
 
-```sh
-# Clone the repository
-git clone https://github.com/LEA-Blockchain/vm-shim.git
-cd vm-shim
+## License
 
-# Install dependencies
-npm install
-
-# Run the build
-npm run build
-```
-
-The bundled output will be placed in the `dist/` directory.
+This project is licensed under the ISC License.
 
 ---
 ## Metadata
@@ -166,5 +121,5 @@ The bundled output will be placed in the `dist/` directory.
 -   **Name**: `@leachain/vm-shim`
 -   **Version**: `1.0.0`
 -   **Description**: A reusable VM shim for Lea-chain WebAssembly modules, compatible with Node.js and browsers.
--   **Category**: Virtual Machine
+-   **Keywords**: leachain, wasm, vm, shim
 -   **Repository**: `https://github.com/LEA-Blockchain/vm-shim.git`
