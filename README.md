@@ -1,7 +1,8 @@
 <!--
-giturl: https://github.com/LEA-Blockchain/vm-shim
-name: @leachain/vm-shim
+giturl: https://github.com/LEA-Blockchain/vm-shim.git
+name: vm-shim
 version: 1.0.0
+description: A reusable VM shim for Lea-chain WebAssembly modules, compatible with Node.js and browsers.
 -->
 
 # @leachain/vm-shim
@@ -114,12 +115,3 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 ## License
 
 This project is licensed under the ISC License.
-
----
-## Metadata
-
--   **Name**: `@leachain/vm-shim`
--   **Version**: `1.0.0`
--   **Description**: A reusable VM shim for Lea-chain WebAssembly modules, compatible with Node.js and browsers.
--   **Keywords**: leachain, wasm, vm, shim
--   **Repository**: `https://github.com/LEA-Blockchain/vm-shim.git`
