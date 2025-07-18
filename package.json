@@ -1,0 +1,46 @@
+{
+  "name": "@leachain/vm-shim",
+  "version": "1.0.0",
+  "description": "A reusable VM shim for Lea-chain WebAssembly modules, compatible with Node.js and browsers.",
+  "main": "./dist/vm-shim.node.cjs",
+  "module": "./dist/vm-shim.node.mjs",
+  "browser": "./dist/vm-shim.web.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "node": {
+        "import": "./dist/vm-shim.node.mjs",
+        "require": "./dist/vm-shim.node.cjs"
+      },
+      "browser": {
+        "import": "./dist/vm-shim.web.js",
+        "script": "./dist/vm-shim.web.min.js"
+      },
+      "default": "./dist/vm-shim.node.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LEA-Blockchain/vm-shim.git"
+  },
+  "keywords": [
+    "leachain",
+    "wasm",
+    "vm",
+    "shim"
+  ],
+  "author": "Allwin Ketnawang",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "^0.25.6"
+  }
+}
